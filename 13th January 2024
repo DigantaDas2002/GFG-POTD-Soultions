@@ -1,0 +1,27 @@
+class Solution
+{
+    public static Node insertionSort(Node head_ref)
+    {
+        //code here
+        Node dummy = new Node(0);
+        dummy.next = head_ref;
+        Node curr = head_ref.next;
+        Node lastSorted = head_ref;
+        while(curr != null){
+            if(curr.data < lastSorted.data){
+                Node prev = dummy;
+                while(prev.next.data < curr.data){
+                    prev = prev.next;
+                }
+                lastSorted.next = curr.next;
+                curr.next = prev.next;
+                prev.next = curr;
+                curr = lastSorted.next;
+            }else{
+                lastSorted =  curr;
+                curr = curr.next;
+            }
+        }
+        return dummy.next;
+    }
+}
