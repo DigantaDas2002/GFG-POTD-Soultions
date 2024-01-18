@@ -1,0 +1,48 @@
+class Solution
+{
+    int min_sprinklers(int gallery[], int n)
+    {
+        // code here
+        // Create an array to store the range of each sprinkler
+        ArrayList<int[]> sprinklers = new ArrayList<>();
+        for(int i=0; i<n; i++)
+        {
+            if(gallery[i] > -1)
+            {
+                sprinklers.add(new int[]{i-gallery[i], i+gallery[i]});
+            }
+        }
+        
+        // Sort the sprinklers based on their range
+        Collections.sort(sprinklers, (a, b) -> Integer.compare(a[0], b[0]));
+        
+        int i=0, count=0;
+        while(i<n)
+        {
+            int max_range = Integer.MIN_VALUE;
+            int j=0;
+            
+            // Find the sprinkler with the maximum range that can water the current partition
+            while(j < sprinklers.size() && sprinklers.get(j)[0] <= i)
+            {
+                max_range = Math.max(max_range, sprinklers.get(j)[1]);
+                j++;
+            }
+            
+            // If no sprinkler can water the current partition, return -1
+            if(max_range < i)
+            {
+                return -1;
+            }
+            
+            // Update the current partition to the next unwatered partition
+            i = max_range + 1;
+            
+            // Increment the count of sprinklers
+            count++;
+        }
+        
+        // Return the minimum number of sprinklers
+        return count;
+    }
+}
