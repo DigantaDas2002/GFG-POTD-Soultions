@@ -1,0 +1,35 @@
+class Solution {
+    static int[][] dp;
+    static ArrayList<Integer>[] edgeList;
+
+    public static int vertexCover(int n, int m, int[][] edges) {
+        dp = new int[n+1][1<<n];
+        edgeList = new ArrayList[n+1];
+        for(int i=0; i<=n; i++) {
+            Arrays.fill(dp[i], -1);
+            edgeList[i] = new ArrayList<>();
+        }
+        for(int i=0; i<m; i++) {
+            int u = edges[i][0];
+            int v = edges[i][1];
+            edgeList[u].add(v);
+            edgeList[v].add(u);
+        }
+        return solve(0, 0, n);
+    }
+
+    static int solve(int i, int mask, int n) {
+        if(i == n) {
+            for(int j=0; j<n; j++) {
+                if((mask&(1<<j)) == 0 && edgeList[j+1].stream().anyMatch(v -> (mask&(1<<(v-1))) == 0)) {
+                    return 1000;
+                }
+            }
+            return 0;
+        }
+        if(dp[i][mask] != -1) return dp[i][mask];
+        int ans = solve(i+1, mask, n);
+        ans = Math.min(ans, 1 + solve(i+1, mask|(1<<i), n));
+        return dp[i][mask] = ans;
+    }
+}
