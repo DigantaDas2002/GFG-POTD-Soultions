@@ -1,0 +1,66 @@
+class Solution {
+    public boolean isTree(int n, int m, ArrayList<ArrayList<Integer>> edges) 
+    {
+        List<List<Integer>> adjacencyList = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            adjacencyList.add(new ArrayList<>());
+        }
+
+        for (ArrayList<Integer> edge : edges) {
+            int u = edge.get(0);
+            int v = edge.get(1);
+            adjacencyList.get(u).add(v);
+            adjacencyList.get(v).add(u);
+        }
+
+        boolean[] visited = new boolean[n];
+
+        // Check if there is a cycle
+        if (hasCycle(adjacencyList, visited, 0, -1)) {
+            return false;
+        }
+
+        // Check if all nodes are reachable
+        for (int i = 0; i < n; i++) {
+            if (!visited[i]) {
+                return false;
+            }
+        }
+
+        // Check if the graph is fully connected
+        return isConnected(adjacencyList, 0);
+    }
+
+    private boolean hasCycle(List<List<Integer>> adjacencyList, boolean[] visited, int current, int parent) {
+        visited[current] = true;
+
+        for (int neighbor : adjacencyList.get(current)) {
+            if (!visited[neighbor]) {
+                if (hasCycle(adjacencyList, visited, neighbor, current)) {
+                    return true;
+                }
+            } else if (neighbor != parent) {
+                return true; // Found a cycle
+            }
+        }
+
+        return false;
+    }
+
+    private boolean isConnected(List<List<Integer>> adjacencyList, int start) {
+        Set<Integer> visited = new HashSet<>();
+        dfs(adjacencyList, visited, start);
+
+        return visited.size() == adjacencyList.size();
+    }
+
+    private void dfs(List<List<Integer>> adjacencyList, Set<Integer> visited, int current) {
+        visited.add(current);
+
+        for (int neighbor : adjacencyList.get(current)) {
+            if (!visited.contains(neighbor)) {
+                dfs(adjacencyList, visited, neighbor);
+            }
+        }
+    }
+}
