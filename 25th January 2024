@@ -1,0 +1,59 @@
+ Set<Integer> primes = generatePrimes();
+        Queue<Integer> queue = new LinkedList<>();
+        Map<Integer, Integer> distance = new HashMap<>();
+
+        queue.offer(num1);
+        distance.put(num1, 0);
+
+        while (!queue.isEmpty()) {
+            int current = queue.poll();
+
+            if (current == num2) {
+                return distance.get(current);
+            }
+
+            char[] currentDigits = Integer.toString(current).toCharArray();
+
+            for (int i = 0; i < 4; i++) {
+                char originalDigit = currentDigits[i];
+
+                for (char newDigit = '0'; newDigit <= '9'; newDigit++) {
+                    if (newDigit != originalDigit) {
+                        currentDigits[i] = newDigit;
+                        int next = Integer.parseInt(new String(currentDigits));
+
+                        if (primes.contains(next) && !distance.containsKey(next)) {
+                            queue.offer(next);
+                            distance.put(next, distance.get(current) + 1);
+                        }
+                    }
+                }
+
+                currentDigits[i] = originalDigit;
+            }
+        }
+
+        // If no path is found
+        return -1;
+    }
+
+    private Set<Integer> generatePrimes() {
+        Set<Integer> primes = new HashSet<>();
+        boolean[] isPrime = new boolean[10000];
+        Arrays.fill(isPrime, true);
+
+        for (int i = 2; i * i < 10000; i++) {
+            if (isPrime[i]) {
+                for (int j = i * i; j < 10000; j += i) {
+                    isPrime[j] = false;
+                }
+            }
+        }
+
+        for (int i = 1000; i < 10000; i++) {
+            if (isPrime[i]) {
+                primes.add(i);
+            }
+        }
+
+        return primes;
