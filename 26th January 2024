@@ -1,0 +1,28 @@
+class Solution
+{
+    //Function to get the maximum total value in the knapsack.
+    double fractionalKnapsack(int W, Item arr[], int n) 
+    {
+        // Your code here
+        Arrays.sort(arr, Comparator.comparingDouble((Item item) -> (double) item.value / item.weight).reversed());
+
+        double totalValue = 0.0;
+        int currentWeight = 0;
+
+        // Iterate through the sorted items and add them to the knapsack.
+        for (int i = 0; i < n; i++) {
+            if (currentWeight + arr[i].weight <= W) {
+                // Take the entire item if it fits in the knapsack.
+                totalValue += arr[i].value;
+                currentWeight += arr[i].weight;
+            } else {
+                // Take a fraction of the item to fill the remaining capacity.
+                double remainingWeight = W - currentWeight;
+                totalValue += (arr[i].value / (double) arr[i].weight) * remainingWeight;
+                break;  // Knapsack is full, exit the loop.
+            }
+        }
+
+        return totalValue;
+    }
+}
