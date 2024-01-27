@@ -1,0 +1,45 @@
+class Solution {
+    static String matrixChainOrder(int p[], int n) {
+        // dp[i][j] stores the minimum number of multiplications needed to multiply
+        // matrices from i to j, inclusive.
+        int[][] dp = new int[n][n];
+
+        // s[i][j] stores the optimal split position for matrices from i to j.
+        int[][] s = new int[n][n];
+
+        // Initialize the dp matrix with 0 and s matrix with -1.
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                dp[i][j] = 0;
+                s[i][j] = -1;
+            }
+        }
+
+        // Build the dp matrix bottom-up.
+        for (int len = 2; len < n; len++) {
+            for (int i = 1; i < n - len + 1; i++) {
+                int j = i + len - 1;
+                dp[i][j] = Integer.MAX_VALUE;
+                for (int k = i; k < j; k++) {
+                    int cost = dp[i][k] + dp[k + 1][j] + p[i - 1] * p[k] * p[j];
+                    if (cost < dp[i][j]) {
+                        dp[i][j] = cost;
+                        s[i][j] = k;
+                    }
+                }
+            }
+        }
+
+        // Build the optimal string representation.
+        return constructMatrixString(s, 1, n - 1);
+    }
+
+    // Helper function to construct the matrix string.
+    static String constructMatrixString(int[][] s, int i, int j) {
+        if (i == j) {
+            return String.valueOf((char) ('A' + i - 1));
+        } else {
+            return "(" + constructMatrixString(s, i, s[i][j]) + constructMatrixString(s, s[i][j] + 1, j) + ")";
+        }
+    }
+}
