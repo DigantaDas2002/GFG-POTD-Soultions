@@ -1,0 +1,58 @@
+class Solution {
+    private long[][][] dp;
+
+    public long findNthNumer(int n, int k) {
+        long low = 0, hi = (long) 1e18;
+        dp = new long[2][65][65];
+        
+        while (low <= hi) {
+            long mid = low + (hi - low) / 2;
+            long count = find(mid, k);
+            if (count >= n) {
+                hi = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+        return low;
+    }
+
+    private long find(long n, int k) {
+        StringBuilder s = new StringBuilder(Long.toBinaryString(n));
+        reset();
+        return dpf(s, s.length(), 1, k);
+    }
+
+    private long dpf(StringBuilder s, int n, int tight, int k) {
+        if (k < 0) {
+            return 0;
+        }
+        if (n == 0) {
+            return 1;
+        }
+        if (dp[tight][k][n] != -1) return dp[tight][k][n];
+
+        int ub;
+        if (tight == 1) {
+            ub = s.charAt(s.length() - n) - '0';
+        } else {
+            ub = 1;
+        }
+        long ans = 0;
+        for (int dig = 0; dig <= ub; dig++) {
+            long res = dpf(s, n - 1, dig == ub ? tight : 0, k - dig);
+            ans += res;
+        }
+
+        return dp[tight][k][n] = ans;
+    }
+
+    private void reset() {
+        for (int i = 0; i < 65; i++) {
+            for (int j = 0; j < 65; j++) {
+                Arrays.fill(dp[0][i], -1);
+                Arrays.fill(dp[1][i], -1);
+            }
+        }
+    }
+}
