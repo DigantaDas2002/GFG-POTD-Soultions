@@ -1,0 +1,40 @@
+//Function to insert string into TRIE.
+static void insert(TrieNode root, String key) 
+{
+    // Your code here
+    TrieNode current = root;
+
+    for (int level = 0; level < key.length(); level++) {
+        int index = key.charAt(level) - 'a';
+
+        if (current.children[index] == null) {
+            current.children[index] = new TrieNode();
+        }
+
+        current = current.children[index];
+    }
+
+    // Mark the last node as the end of the word
+    current.isEndOfWord = true;
+}
+
+//Function to use TRIE data structure and search the given string.
+static boolean search(TrieNode root, String key)
+{
+    // Your code here
+    TrieNode current = root;
+
+    for (int level = 0; level < key.length(); level++) {
+        int index = key.charAt(level) - 'a';
+
+        if (current.children[index] == null) {
+            // If the current character is not present in the Trie, the key is not present.
+            return false;
+        }
+
+        current = current.children[index];
+    }
+
+    // Check if the last node marks the end of a word
+    return current != null && current.isEndOfWord;
+}
