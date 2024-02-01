@@ -1,0 +1,33 @@
+class Solution
+{
+    //Function to check if a string is Pangram or not.
+    public static boolean checkPangram(String s) {
+        // Create a boolean array to mark the presence of each letter.
+        boolean[] present = new boolean[26];
+
+        // Traverse the input string.
+        for (int i = 0; i < s.length(); i++) {
+            char ch = s.charAt(i);
+
+            // If the character is an uppercase letter, convert it to lowercase.
+            if ('A' <= ch && ch <= 'Z') {
+                ch = (char) (ch - 'A' + 'a');
+            }
+
+            // If the character is a lowercase letter, mark its presence in the array.
+            if ('a' <= ch && ch <= 'z') {
+                present[ch - 'a'] = true;
+            }
+        }
+
+        // Check if all letters are present in the array.
+        for (boolean isPresent : present) {
+            if (!isPresent) {
+                return false;
+            }
+        }
+
+        // If all letters are present, return true.
+        return true;
+    }
+}
