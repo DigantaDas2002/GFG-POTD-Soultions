@@ -1,0 +1,44 @@
+class Solution
+{
+    int atoi(String s) {
+        if (s == null || s.length() == 0) {
+            return -1;
+        }
+
+        int result = 0;
+        int i = 0;
+        int n = s.length();
+        int sign = 1;
+
+        while (i < n && Character.isWhitespace(s.charAt(i))) {
+            i++;
+        }
+
+        if (i < n && (s.charAt(i) == '+' || s.charAt(i) == '-')) {
+            sign = (s.charAt(i) == '-') ? -1 : 1;
+            i++;
+        }
+
+        while (i < n && Character.isDigit(s.charAt(i))) {
+            int digit = s.charAt(i) - '0';
+
+            if (result > Integer.MAX_VALUE / 10 || (result == Integer.MAX_VALUE / 10 && digit > 7)) {
+                return (sign == 1) ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+            }
+
+            result = result * 10 + digit;
+            i++;
+        }
+
+        // Check for invalid characters after numeric part
+        while (i < n && Character.isWhitespace(s.charAt(i))) {
+            i++;
+        }
+
+        if (i < n) {
+            return -1; // Invalid characters present after numeric part
+        }
+
+        return sign * result;
+    }
+}
