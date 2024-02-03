@@ -1,0 +1,16 @@
+class Solution
+{
+   long DecimalValue(Node head)
+   {
+ 	final int MODULO = 1000000007; // 10^9 + 7
+
+        long result = 0;
+
+        while (head != null) {
+            result = (result * 2 + head.data) % MODULO;
+            head = head.next;
+        }
+
+        return result;
+   }
+}
