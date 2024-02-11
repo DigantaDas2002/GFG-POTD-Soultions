@@ -1,0 +1,28 @@
+class Solution{
+    static ArrayList<Integer> recamanSequence(int n){
+        ArrayList<Integer> sequence = new ArrayList<>();
+        Set<Integer> included = new HashSet<>();
+        
+        if (n <= 0) {
+            return sequence;
+        }
+        
+        sequence.add(0);
+        included.add(0);
+        
+        for (int i = 1; i < n; i++) {
+            int prev = sequence.get(i - 1);
+            int next = prev - i;
+            if (next > 0 && !included.contains(next)) {
+                sequence.add(next);
+                included.add(next);
+            } else {
+                next = prev + i;
+                sequence.add(next);
+                included.add(next);
+            }
+        }
+        
+        return sequence;
+    }
+}
