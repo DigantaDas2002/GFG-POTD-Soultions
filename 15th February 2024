@@ -1,0 +1,43 @@
+class Solution
+{
+    public int isPossible(int[][] paths)
+    {
+        int n = paths.length;
+
+        // Check if the graph is connected
+        if (!isConnected(paths, n)) return 0;
+
+        // Check if all vertices have even degrees
+        for (int i = 0; i < n; i++) {
+            int degree = 0;
+            for (int j = 0; j < n; j++) {
+                degree += paths[i][j];
+            }
+            if (degree % 2 != 0) return 0;
+        }
+
+        return 1;
+    }
+
+    // Function to check if the graph is connected using DFS
+    private boolean isConnected(int[][] paths, int n) {
+        boolean[] visited = new boolean[n];
+        dfs(paths, 0, visited);
+
+        // Check if all vertices are visited
+        for (boolean v : visited) {
+            if (!v) return false;
+        }
+        return true;
+    }
+
+    // DFS traversal to mark visited vertices
+    private void dfs(int[][] paths, int vertex, boolean[] visited) {
+        visited[vertex] = true;
+        for (int i = 0; i < visited.length; i++) {
+            if (paths[vertex][i] == 1 && !visited[i]) {
+                dfs(paths, i, visited);
+            }
+        }
+    }
+}
