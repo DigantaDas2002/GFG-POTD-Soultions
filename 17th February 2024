@@ -1,0 +1,23 @@
+class Solution {
+    
+    public boolean countSub(long arr[], long n){
+        for (int i = 0; i < n; i++) {
+            // Calculate the left and right indices of the current element
+            int left = 2 * i + 1;
+            int right = 2 * i + 2;
+
+            // If left child is within bounds and greater than the parent, return false
+            if (left < n && arr[left] > arr[i]) {
+                return false;
+            }
+
+            // If right child is within bounds and greater than the parent, return false
+            if (right < n && arr[right] > arr[i]) {
+                return false;
+            }
+        }
+
+        // If no violation found, return true
+        return true;
+    }
+}
