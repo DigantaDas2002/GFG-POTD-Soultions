@@ -1,0 +1,13 @@
+class Solution
+{
+    public static int sumOfLeafNodes(Node root)
+    {
+        if (root == null)
+            return 0;
+        // If the node is a leaf node, return its data
+        if (root.left == null && root.right == null)
+            return root.data;
+        // Recursively find the sum of leaf nodes in the left and right subtrees
+        return sumOfLeafNodes(root.left) + sumOfLeafNodes(root.right); 
+    }
+}
