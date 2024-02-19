@@ -1,0 +1,35 @@
+class Solution{
+    static int minValue(String s, int k){
+         Map<Character, Integer> frequencyMap = new HashMap<>();
+        
+        // Count the frequency of each character in the string
+        for (char c : s.toCharArray()) {
+            frequencyMap.put(c, frequencyMap.getOrDefault(c, 0) + 1);
+        }
+        
+        PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
+        
+        // Add frequencies to priority queue
+        for (int count : frequencyMap.values()) {
+            pq.add(count);
+        }
+        
+        // Remove k characters with highest frequencies
+        while (k-- > 0) {
+            int highestFreq = pq.poll();
+            if (highestFreq > 1) {
+                pq.add(highestFreq - 1);
+            }
+        }
+        
+        int result = 0;
+        
+        // Calculate the minimum value after removal of k characters
+        while (!pq.isEmpty()) {
+            int freq = pq.poll();
+            result += freq * freq;
+        }
+        
+        return result;
+    }
+}
